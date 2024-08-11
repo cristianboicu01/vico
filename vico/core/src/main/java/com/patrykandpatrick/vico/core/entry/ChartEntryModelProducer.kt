@@ -32,7 +32,10 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * A [ChartModelProducer] implementation that generates [ChartEntryModel] instances.
@@ -51,8 +54,9 @@ public class ChartEntryModelProducer(
     private var cachedInternalModel: InternalModel? = null
     private val mutex = Mutex()
     private val coroutineScope = CoroutineScope(dispatcher)
-    private val updateReceivers: HashMap<Any, UpdateReceiver> = HashMap()
+    private val updateReceivers = ConcurrentHashMap<Any, UpdateReceiver>()
     private val extraStore = MutableExtraStore()
+    private val registrationLock = Mutex()
 
     public constructor(
         vararg entryCollections: List<ChartEntry>,
@@ -74,11 +78,14 @@ public class ChartEntryModelProducer(
         series = entries.copy()
         updateExtras(extraStore)
         cachedInternalModel = null
-        val deferredUpdates = updateReceivers.values.map { updateReceiver ->
-            coroutineScope.async { updateReceiver.handleUpdate() }
-        }
         coroutineScope.launch {
+            registrationLock.lock()
+            val deferredUpdates = updateReceivers.values.map { updateReceiver ->
+                async { updateReceiver.handleUpdate() }
+            }
+
             deferredUpdates.awaitAll()
+            registrationLock.unlock()
             mutex.unlock()
         }
         return true
@@ -200,8 +207,12 @@ public class ChartEntryModelProducer(
             getOldModel,
             updateChartValues,
         ).run {
-            updateReceivers[key] = this
-            handleUpdate()
+            runBlocking {
+                registrationLock.withLock {
+                    updateReceivers[key] = this@run
+                    handleUpdate()
+                }
+            }
         }
     }
 
