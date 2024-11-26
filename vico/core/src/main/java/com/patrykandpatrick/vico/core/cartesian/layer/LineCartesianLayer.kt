@@ -18,9 +18,9 @@ package com.patrykandpatrick.vico.core.cartesian.layer
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.PorterDuff
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.patrykandpatrick.vico.core.cartesian.CartesianDrawingContext
@@ -40,7 +40,6 @@ import com.patrykandpatrick.vico.core.cartesian.marker.CartesianMarker
 import com.patrykandpatrick.vico.core.cartesian.marker.LineCartesianLayerMarkerTarget
 import com.patrykandpatrick.vico.core.cartesian.marker.MutableLineCartesianLayerMarkerTarget
 import com.patrykandpatrick.vico.core.common.Defaults
-import com.patrykandpatrick.vico.core.common.DrawingContext
 import com.patrykandpatrick.vico.core.common.Fill
 import com.patrykandpatrick.vico.core.common.Insets
 import com.patrykandpatrick.vico.core.common.VerticalPosition
@@ -51,6 +50,7 @@ import com.patrykandpatrick.vico.core.common.data.CartesianLayerDrawingModelInte
 import com.patrykandpatrick.vico.core.common.data.ExtraStore
 import com.patrykandpatrick.vico.core.common.data.MutableExtraStore
 import com.patrykandpatrick.vico.core.common.doubled
+import com.patrykandpatrick.vico.core.common.getBitmap
 import com.patrykandpatrick.vico.core.common.getRepeating
 import com.patrykandpatrick.vico.core.common.getStart
 import com.patrykandpatrick.vico.core.common.half
@@ -366,7 +366,7 @@ protected constructor(
 
         canvas.saveLayer(opacity = drawingModel?.opacity ?: 1f)
 
-        val lineFillBitmap = getLineFillBitmap(seriesIndex)
+        val lineFillBitmap = getBitmap(cacheKeyNamespace, seriesIndex)
         lineFillCanvas.setBitmap(lineFillBitmap)
         line.draw(context, linePath, lineFillCanvas, verticalAxisPosition)
         canvas.drawBitmap(lineFillBitmap, 0f, 0f, null)
@@ -381,15 +381,6 @@ protected constructor(
       }
     }
   }
-
-  private fun DrawingContext.getLineFillBitmap(seriesIndex: Int) =
-    cacheStore
-      .getOrNull<Bitmap>(cacheKeyNamespace, seriesIndex)
-      ?.takeIf { it.width == canvas.width && it.height == canvas.height }
-      ?.apply { eraseColor(Color.TRANSPARENT) }
-      ?: Bitmap.createBitmap(canvas.width, canvas.height, Bitmap.Config.ARGB_8888).also {
-        cacheStore[cacheKeyNamespace, seriesIndex] = it
-      }
 
   protected open fun CartesianDrawingContext.updateMarkerTargets(
     entry: LineCartesianLayerModel.Entry,
@@ -407,7 +398,9 @@ protected constructor(
         entry,
         limitedCanvasY,
         lineFillBitmap.getPixel(
-          canvasX.roundToInt().coerceIn(0, lineFillBitmap.width - 1),
+          canvasX
+            .roundToInt()
+            .coerceIn(ceil(layerBounds.left).toInt(), layerBounds.right.toInt() - 1),
           limitedCanvasY.roundToInt(),
         ),
       )

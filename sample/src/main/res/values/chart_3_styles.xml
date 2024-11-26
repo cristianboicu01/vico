@@ -18,6 +18,17 @@
     <color name="chart_3_color_1">#ffbb00</color>
     <color name="chart_3_color_2">#9db591</color>
 
+    <style name="Chart3CartesianChartStyle">
+        <item name="bottomAxisStyle">@style/Chart3BottomAxisStyle</item>
+        <item name="fadingEdgeVisibilityInterpolator">androidx.interpolator.view.animation.FastOutSlowInInterpolator</item>
+        <item name="fadingEdgeWidth">32dp</item>
+        <item name="layers">line</item>
+        <item name="lineLayerStyle">@style/Chart3LineLayerStyle</item>
+        <item name="showBottomAxis">true</item>
+        <item name="showStartAxis">true</item>
+        <item name="startAxisStyle">@style/Chart3StartAxisStyle</item>
+    </style>
+
     <style name="Chart3AxisStyle">
         <item name="showTitle">true</item>
     </style>
@@ -40,7 +51,7 @@
     </style>
 
     <style name="Chart3BottomAxisTitleBackgroundStyle" parent="Chart3AxisTitleBackgroundStyle">
-        <item name="color">@color/chart_3_color_2</item>
+        <item name="android:color">@color/chart_3_color_2</item>
     </style>
 
     <style name="Chart3BottomAxisTitleStyle" parent="Chart3AxisTitleStyle">
@@ -50,11 +61,11 @@
     </style>
 
     <style name="Chart3Line1Style">
-        <item name="color">@color/chart_3_color_1</item>
+        <item name="android:color">@color/chart_3_color_1</item>
     </style>
 
     <style name="Chart3StartAxisTitleBackgroundStyle" parent="Chart3AxisTitleBackgroundStyle">
-        <item name="color">@color/chart_3_color_1</item>
+        <item name="android:color">@color/chart_3_color_1</item>
     </style>
 
     <style name="Chart3StartAxisTitleStyle" parent="Chart3AxisTitleStyle">
