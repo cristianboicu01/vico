@@ -1,0 +1,33 @@
+name: Publish Custom Modules
+on:
+  push:
+    tags:
+      - 'v*' # Matches tags like v1.0, v2.0.1, etc.
+jobs:
+  publish:
+    name: Publish Custom Modules
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v4
+      # Step 2: Set up Java
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # Or adapt to your required JDK distribution
+          java-version: '17'      # Replace with the version of Java your Gradle project requires
+      # Step 3: Cache Gradle dependencies
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      # Step 4: Publish using Gradle
+      - name: Publish Custom Modules
+        run: ./gradlew customPublish
+        env:
+          CARIAD_APP_TOOLKIT_ARTIFACTORY_USERNAME: ${{ secrets.CARIAD_APP_TOOLKIT_ARTIFACTORY_USERNAME }}        # Repository username (set this in your GitHub repository secrets)
+          CARIAD_APP_TOOLKIT_ARTIFACTORY_API_KEY: ${{ secrets.CARIAD_APP_TOOLKIT_ARTIFACTORY_API_KEY }} # Repository password (set this in your GitHub repository secrets)

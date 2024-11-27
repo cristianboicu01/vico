@@ -51,7 +51,7 @@ ext {
     getArtifactId = this.&getArtifactId
     customizePom = this.&customizePom
     setUpRepositories = this.&setUpRepositories
-    setUpSigning = this.&setUpSigning
+//    setUpSigning = this.&setUpSigning
 }
 
 String getNamespace(Project project) {
@@ -66,7 +66,7 @@ void customizePom(MavenPom pom) {
 
     pom.name = "Vico"
     pom.description = "A light and extensible chart library for Android."
-    pom.url = "https://github.com/patrykandpatrick/vico"
+    pom.url = "https://github.com/vwdfive/cat-vico"
 
     pom.licenses {
 
@@ -77,23 +77,17 @@ void customizePom(MavenPom pom) {
     }
 
     pom.scm {
-        connection = "scm:git:git://github.com/patrykandpatrick/vico.git"
-        developerConnection = "scm:git:ssh://github.com/patrykandpatrick/vico.git"
-        url = "https://github.com/patrykandpatrick/vico"
+        connection = "scm:git:git://github.com/vwdfive/cat-vico.git"
+        developerConnection = "scm:git:ssh://github.com/vwdfive/cat-vico.git"
+        url = "https://github.com/vwdfive/cat-vico"
     }
 
     pom.developers {
 
         developer {
-            id = "patrykgoworowski"
-            name = "Patryk Goworowski"
-            email = "contact@patrykgoworowski.pl"
-        }
-
-        developer {
-            id = "patrickmichalik"
-            name = "Patrick Michalik"
-            email = "contact@patrickmichalik.com"
+            id = "cristianboicu01"
+            name = "Cristian Boicu"
+            email = "cristian.boicu@voya.ai"
         }
     }
 }
@@ -104,13 +98,11 @@ boolean isReleaseVersion() {
 
 void setUpRepositories(RepositoryHandler handler) {
     handler.maven {
-        def releaseUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-        def snapshotUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-        url = isReleaseVersion() ? releaseUrl : snapshotUrl
+        url = "https://jfrog.devstack.vwgroup.com/artifactory/catartif-cariad-app-toolkit-maven"
 
         credentials {
-            username = findProperty("OSSRH_TOKEN")
-            password = findProperty("OSSRH_TOKEN_PASSWORD")
+            username = System.getenv("CARIAD_APP_TOOLKIT_ARTIFACTORY_USERNAME")
+            password = System.getenv("CARIAD_APP_TOOLKIT_ARTIFACTORY_API_KEY")
         }
     }
 }

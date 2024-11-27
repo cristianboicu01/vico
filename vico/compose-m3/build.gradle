@@ -64,7 +64,7 @@ afterEvaluate {
         }
     }
 
-    setUpSigning(signing, publishing.publications.VicoComposeM3)
+//    setUpSigning(signing, publishing.publications.VicoComposeM3)
 }
 
 dependencies {

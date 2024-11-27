@@ -53,7 +53,7 @@ afterEvaluate {
         }
     }
 
-    setUpSigning(signing, publishing.publications.VicoView)
+//    setUpSigning(signing, publishing.publications.VicoView)
 }
 
 dependencies {

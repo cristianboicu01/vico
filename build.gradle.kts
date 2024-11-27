@@ -31,6 +31,16 @@ apply("versions.gradle")
 
 tasks.register<Delete>("clean") { delete(rootProject.layout.buildDirectory) }
 
+val selectedModules = listOf(":vico:core", ":vico:compose")
+
+tasks.register("customPublish") {
+  description = "Publishes only selected modules"
+  group = "publishing"
+  selectedModules.forEach {
+    dependsOn("$it:publish")
+  }
+}
+
 subprojects.forEach { project ->
   project.tasks.withType<Test>().configureEach { useJUnitPlatform() }
 }

@@ -63,7 +63,7 @@ afterEvaluate {
         }
     }
 
-    setUpSigning(signing, publishing.publications.VicoComposeM2)
+//    setUpSigning(signing, publishing.publications.VicoComposeM2)
 }
 
 dependencies {
