@@ -74,6 +74,7 @@ public open class CartesianChart(
   topAxis: Axis<Axis.Position.Horizontal.Top>? = null,
   endAxis: Axis<Axis.Position.Vertical.End>? = null,
   bottomAxis: Axis<Axis.Position.Horizontal.Bottom>? = null,
+  public val updateMarkerOnClick: Boolean = false,
   public val marker: CartesianMarker? = null,
   public val markerVisibilityListener: CartesianMarkerVisibilityListener? = null,
   public val layerPadding: CartesianLayerPadding = CartesianLayerPadding(),
@@ -395,6 +396,7 @@ public open class CartesianChart(
   /** Creates a new [CartesianChart] based on this one. */
   public fun copy(
     vararg layers: CartesianLayer<*> = this.layers.toTypedArray(),
+    updateMarkerOnClick: Boolean = this.updateMarkerOnClick,
     startAxis: Axis<Axis.Position.Vertical.Start>? = this.startAxis,
     topAxis: Axis<Axis.Position.Horizontal.Top>? = this.topAxis,
     endAxis: Axis<Axis.Position.Vertical.End>? = this.endAxis,
@@ -410,6 +412,7 @@ public open class CartesianChart(
   ): CartesianChart =
     CartesianChart(
       *layers,
+      updateMarkerOnClick = updateMarkerOnClick,
       startAxis = startAxis,
       topAxis = topAxis,
       endAxis = endAxis,

@@ -57,9 +57,6 @@ public open class DefaultCartesianMarker(
   protected val indicatorSizeDp: Float = Defaults.MARKER_INDICATOR_SIZE,
   protected val guideline: LineComponent? = null,
 ) : CartesianMarker {
-  override val displayOnTap: Boolean
-    get() = false
-
   protected val tempBounds: RectF = RectF()
 
   protected val markerCorneredShape: MarkerCorneredShape? =

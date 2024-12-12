@@ -46,6 +46,7 @@ import com.patrykandpatrick.vico.core.common.data.ExtraStore
 @Composable
 public fun rememberCartesianChart(
   vararg layers: CartesianLayer<*>,
+  updateMarkerOnClick: Boolean = false,
   startAxis: Axis<Axis.Position.Vertical.Start>? = null,
   topAxis: Axis<Axis.Position.Horizontal.Top>? = null,
   endAxis: Axis<Axis.Position.Vertical.End>? = null,
@@ -62,6 +63,7 @@ public fun rememberCartesianChart(
   val wrapper = remember { ValueWrapper<CartesianChart?>(null) }
   return remember(
     *layers,
+    updateMarkerOnClick,
     startAxis,
     topAxis,
     endAxis,
@@ -78,6 +80,7 @@ public fun rememberCartesianChart(
     val cartesianChart =
       wrapper.value?.copy(
         *layers,
+        updateMarkerOnClick = updateMarkerOnClick,
         startAxis = startAxis,
         topAxis = topAxis,
         endAxis = endAxis,
@@ -93,6 +96,7 @@ public fun rememberCartesianChart(
       )
         ?: CartesianChart(
           *layers,
+          updateMarkerOnClick = updateMarkerOnClick,
           startAxis = startAxis,
           topAxis = topAxis,
           endAxis = endAxis,

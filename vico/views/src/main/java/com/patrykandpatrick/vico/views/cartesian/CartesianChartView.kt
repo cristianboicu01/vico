@@ -274,7 +274,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     val touchHandled = motionEventHandler.handleMotionEvent(
       event,
       scrollHandler,
-      chart?.marker?.displayOnTap ?: false,
+      chart?.updateMarkerOnClick ?: false,
     )
 
     if (scrollDirectionResolved.not() && event.historySize > 0) {
@@ -338,12 +338,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
           zoom = zoomHandler.value,
         )
 
-      if (chart.marker?.displayOnTap == true) {
-        chart.draw(drawingContext, markerTapPoint, chart.marker?.displayOnTap ?: false)
-      } else {
-        chart.draw(drawingContext, markerTouchPoint, chart.marker?.displayOnTap ?: false)
-      }
-
+      chart.draw(drawingContext, markerTapPoint, chart.updateMarkerOnClick)
       measuringContext.reset()
     }
   }

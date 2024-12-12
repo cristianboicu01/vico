@@ -152,6 +152,7 @@ private fun ComposeChart11(
       marker = marker,
       persistentMarkers = persistentMarkers,
       markerVisibilityListener = selectedBarListener,
+      updateMarkerOnClick = true,
     ),
     modelProducer = modelProducer,
     modifier = modifier,
@@ -235,7 +236,7 @@ private fun ViewChart11(
 }
 
 val defaultBarColor = Color.Blue
-val selectedColor =  Color.Green
+val selectedColor = Color.Green
 const val barThickness = 10f
 
 private val monthNames = DateFormatSymbols.getInstance(Locale.US).shortMonths
@@ -244,9 +245,6 @@ private val bottomAxisValueFormatter = CartesianValueFormatter { _, x, _ ->
 }
 
 private class CustomMarker : CartesianMarker {
-  override val displayOnTap: Boolean
-    get() = true
-
   override fun draw(context: CartesianDrawingContext, targets: List<CartesianMarker.Target>) {
     context.canvas.drawRoundRect(
       targets.first().canvasX - 25,
